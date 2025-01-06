@@ -14,7 +14,7 @@ RUN npm install
 COPY . .
 
 # Expón el puerto que usa la aplicación (ajusta según tu configuración)
-EXPOSE 3000
+EXPOSE 4000
 
 # Comando para iniciar la aplicación Express
 CMD ["npm", "start"]
