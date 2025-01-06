@@ -1,6 +1,5 @@
 name: Backend CI/CD
 
-# Disparar el pipeline al hacer un push a la rama principal (main)
 on:
   push:
     branches:
@@ -8,7 +7,6 @@ on:
 
 jobs:
   build-and-deploy:
-    # Utilizar un runner basado en Ubuntu
     runs-on: ubuntu-latest
 
     steps:
@@ -16,25 +14,31 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      # Paso 2: Configurar Docker
+      # Paso 2: Copiar el archivo .env.template a .env
+      - name: Create .env from .env.template
+        run: cp .env.template .env
+
+      # Paso 3: Cargar las variables de entorno desde .env
+      - name: Set up environment variables
+        run: |
+          export $(cat .env | xargs)
+
+      # Paso 4: Configurar Docker
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
 
-      # Paso 3: Compilar y subir la imagen de Docker a Docker Hub
+      # Paso 5: Compilar y subir la imagen de Docker a Docker Hub
       - name: Build and push Docker image
         uses: docker/build-push-action@v4
         with:
-          # Contexto: raíz del repositorio
           context: .
-          # Configuración de la imagen
           push: true
           tags: your-dockerhub-username/your-backend-image:latest
         env:
-          # Credenciales de Docker Hub
           DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
           DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
 
-      # Paso 4: Configurar el webhook en Docker Hub para notificar a Render
+      # Paso 6: Notificar a Render para redeploy
       - name: Notify Render to redeploy service
         run: |
           curl -X POST https://api.render.com/deploy \
