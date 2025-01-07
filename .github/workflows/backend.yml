@@ -34,10 +34,3 @@ jobs:
           tags: kuajinaiss/backend-taller3:latest
           cache-from: type=gha
           cache-to: type=gha,mode=max
-
-      # Paso 5: Notificar a Render para redesplegar el servicio
-      - name: Notify Render to redeploy service
-        run: |
-          curl -X POST "https://api.render.com/deploy/srv-cttm6kjv2p9s738jo2og?key=cRXaQiuvfaA" \
-            -H "Accept: application/json" \
-            -H "Authorization: Bearer ${{ secrets.RENDER_API_KEY }}"
