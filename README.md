@@ -31,4 +31,4 @@ Now you can run the project with following command in the bash console
 	npm run dev
 ```
 
-TESTING DEPLOYMENT TO DOCKER
+TESTING DEPLOYMENT
